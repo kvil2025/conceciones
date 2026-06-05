@@ -1231,6 +1231,35 @@ body {
   background: rgba(255,255,255,0.15);
 }
 
+/* Corner logos */
+.corner-logo {
+  position: fixed;
+  z-index: 501;
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.45;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.corner-logo:hover {
+  opacity: 0.75;
+}
+
+.corner-tl { top: 24px; left: 24px; }
+.corner-tr { top: 24px; right: 24px; }
+.corner-bl { bottom: 24px; left: 24px; }
+.corner-br { bottom: 24px; right: 24px; }
+
+.corner-geologgia {
+  background: rgba(255,255,255,0.88);
+  border-radius: 5px;
+  padding: 3px 8px;
+  height: 32px;
+}
+
 /* Title */
 .login-title {
   font-family: var(--font-heading);

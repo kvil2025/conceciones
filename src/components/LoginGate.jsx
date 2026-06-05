@@ -102,6 +102,12 @@ export default function LoginGate({ onAccessGranted }) {
       {/* Background image overlay */}
       <div className="login-bg" />
 
+      {/* Corner logos */}
+      <img src="/logo-tecknologia.png" alt="TECKNOLOGIA" className="corner-logo corner-tl" />
+      <img src="/logo-geologgia.png" alt="Geologgia Ltda." className="corner-logo corner-tr corner-geologgia" />
+      <img src="/logo-geologgia.png" alt="Geologgia Ltda." className="corner-logo corner-bl corner-geologgia" />
+      <img src="/logo-tecknologia.png" alt="TECKNOLOGIA" className="corner-logo corner-br" />
+
       {/* Content */}
       <div className="login-content">
         {/* Logos */}
