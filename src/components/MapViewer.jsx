@@ -396,6 +396,17 @@ export default function MapViewer({
         </div>
       )}
 
+      {/* Brand watermark */}
+      <div className="map-watermark">
+        <img src="/logo-tecknologia.png" alt="TECKNOLOGIA" />
+        <div className="map-watermark-divider" />
+        <img
+          src="/logo-geologgia.png"
+          alt="Geologgia Ltda."
+          className="watermark-geologgia"
+        />
+      </div>
+
       {/* Status Bar */}
       <div className="map-status-bar">
         {cursorCoords && (

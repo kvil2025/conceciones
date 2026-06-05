@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { LAYERS, LAYER_ORDER } from './config/layers';
+import LoginGate from './components/LoginGate';
 import Sidebar from './components/Sidebar';
 import MapViewer from './components/MapViewer';
 import StatsModal from './components/StatsModal';
@@ -7,6 +8,18 @@ import LoadingScreen from './components/LoadingScreen';
 import Toast from './components/Toast';
 
 export default function App() {
+  // Auth / Access gate
+  const [hasAccess, setHasAccess] = useState(() => {
+    const stored = localStorage.getItem('catastro_access');
+    return stored ? true : false;
+  });
+  const [userName, setUserName] = useState(() => {
+    try {
+      const stored = localStorage.getItem('catastro_access');
+      return stored ? JSON.parse(stored).name : '';
+    } catch { return ''; }
+  });
+
   // Layer visibility state
   const [layerVisibility, setLayerVisibility] = useState(() => {
     const initial = {};
@@ -68,107 +81,109 @@ export default function App() {
 
   // Load stats.json on mount
   useEffect(() => {
+    if (!hasAccess) return;
     fetch('/data/stats.json')
       .then((r) => r.json())
       .then((data) => setStatsData(data))
       .catch(console.error);
-  }, []);
+  }, [hasAccess]);
 
   // App ready after a short delay to allow map to initialize
   useEffect(() => {
+    if (!hasAccess) return;
     const timer = setTimeout(() => setAppReady(true), 1800);
     return () => clearTimeout(timer);
+  }, [hasAccess]);
+
+  // Handle access granted from LoginGate
+  const handleAccessGranted = useCallback(({ name }) => {
+    setHasAccess(true);
+    setUserName(name);
   }, []);
 
+  // If not authenticated, show login gate
+  if (!hasAccess) {
+    return <LoginGate onAccessGranted={handleAccessGranted} />;
+  }
+
   // Toggle layer visibility
-  const handleToggleLayer = useCallback(
-    (layerId) => {
-      setLayerVisibility((prev) => {
-        const newVisibility = !prev[layerId];
-        if (newVisibility) {
-          showToast(`Cargando ${LAYERS[layerId].name}...`, 'loading', 8000);
-        }
-        return { ...prev, [layerId]: newVisibility };
-      });
-    },
-    [showToast]
-  );
+  const handleToggleLayer = (layerId) => {
+    setLayerVisibility((prev) => {
+      const newVisibility = !prev[layerId];
+      if (newVisibility) {
+        showToast(`Cargando ${LAYERS[layerId].name}...`, 'loading', 8000);
+      }
+      return { ...prev, [layerId]: newVisibility };
+    });
+  };
 
   // Update loading state for a layer
-  const handleLayerLoading = useCallback(
-    (layerId, isLoading) => {
-      setLayerLoading((prev) => ({
-        ...prev,
-        [layerId]: isLoading,
-      }));
-      if (!isLoading && layerVisibility[layerId]) {
-        // Remove loading toast and show success
-        setToasts((prev) =>
-          prev.filter((t) => !t.message.includes(LAYERS[layerId].name))
-        );
-        showToast(
-          `${LAYERS[layerId].name}: ${LAYERS[layerId].count.toLocaleString('es-CL')} registros cargados`,
-          'success',
-          3000
-        );
-      }
-    },
-    [layerVisibility, showToast]
-  );
+  const handleLayerLoading = (layerId, isLoading) => {
+    setLayerLoading((prev) => ({
+      ...prev,
+      [layerId]: isLoading,
+    }));
+    if (!isLoading && layerVisibility[layerId]) {
+      setToasts((prev) =>
+        prev.filter((t) => !t.message.includes(LAYERS[layerId].name))
+      );
+      showToast(
+        `${LAYERS[layerId].name}: ${LAYERS[layerId].count.toLocaleString('es-CL')} registros cargados`,
+        'success',
+        3000
+      );
+    }
+  };
 
   // Search handler with debounce
   const searchTimeoutRef = useRef(null);
-  const handleSearch = useCallback(
-    (query) => {
-      setSearchQuery(query);
+  const handleSearch = (query) => {
+    setSearchQuery(query);
 
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
 
-      if (!query || query.length < 2) {
-        setSearchResults([]);
-        return;
-      }
+    if (!query || query.length < 2) {
+      setSearchResults([]);
+      return;
+    }
 
-      searchTimeoutRef.current = setTimeout(() => {
-        const results = [];
-        const q = query.toLowerCase();
+    searchTimeoutRef.current = setTimeout(() => {
+      const results = [];
+      const q = query.toLowerCase();
 
-        // Search through loaded layer data
-        for (const layerId of LAYER_ORDER) {
-          const data = layerDataRef.current[layerId];
-          if (!data) continue;
+      for (const layerId of LAYER_ORDER) {
+        const data = layerDataRef.current[layerId];
+        if (!data) continue;
 
-          const features = data.features || [];
-          for (let i = 0; i < features.length && results.length < 30; i++) {
-            const props = features[i].properties;
-            const name = (props.nombre || '').toLowerCase();
-            const titular = (props.titular || '').toLowerCase();
+        const features = data.features || [];
+        for (let i = 0; i < features.length && results.length < 30; i++) {
+          const props = features[i].properties;
+          const name = (props.nombre || '').toLowerCase();
+          const titular = (props.titular || '').toLowerCase();
 
-            if (name.includes(q) || titular.includes(q)) {
-              results.push({
-                layerId,
-                id: props.id,
-                name: props.nombre,
-                titular: props.titular,
-                tipo: props.tipo,
-                hectareas: props.hectareas,
-                lat: props.lat_centro,
-                lng: props.lng_centro,
-              });
-            }
+          if (name.includes(q) || titular.includes(q)) {
+            results.push({
+              layerId,
+              id: props.id,
+              name: props.nombre,
+              titular: props.titular,
+              tipo: props.tipo,
+              hectareas: props.hectareas,
+              lat: props.lat_centro,
+              lng: props.lng_centro,
+            });
           }
         }
+      }
 
-        setSearchResults(results);
-      }, 300);
-    },
-    []
-  );
+      setSearchResults(results);
+    }, 300);
+  };
 
   // Handle search result click — fly to location
-  const handleResultClick = useCallback((result) => {
+  const handleResultClick = (result) => {
     if (result.lat && result.lng) {
       setFlyTo({
         lng: result.lng,
@@ -177,16 +192,15 @@ export default function App() {
         timestamp: Date.now(),
       });
 
-      // Ensure the layer is visible
       setLayerVisibility((prev) => ({
         ...prev,
         [result.layerId]: true,
       }));
     }
-  }, []);
+  };
 
   // Register layer data for search
-  const handleDataLoaded = useCallback((layerId, data) => {
+  const handleDataLoaded = (layerId, data) => {
     layerDataRef.current[layerId] = data;
     if (data && data.features) {
       setFeatureCounts((prev) => ({
@@ -194,7 +208,14 @@ export default function App() {
         [layerId]: data.features.length,
       }));
     }
-  }, []);
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('catastro_access');
+    setHasAccess(false);
+    setAppReady(false);
+  };
 
   return (
     <>
@@ -214,6 +235,8 @@ export default function App() {
           onResultClick={handleResultClick}
           featureCounts={featureCounts}
           onShowStats={() => setShowStats(true)}
+          userName={userName}
+          onLogout={handleLogout}
         />
         <MapViewer
           layerVisibility={layerVisibility}
@@ -230,7 +253,6 @@ export default function App() {
       {showStats && statsData && (
         <StatsModal data={statsData} onClose={() => setShowStats(false)} />
       )}
-      {/* Toast notifications */}
       <Toast toasts={toasts} />
     </>
   );

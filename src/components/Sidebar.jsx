@@ -10,6 +10,8 @@ import {
   Mountain,
   Pickaxe,
   X,
+  LogOut,
+  User,
 } from 'lucide-react';
 import { LAYERS, LAYER_ORDER, BASEMAPS, formatNumber } from '../config/layers';
 
@@ -27,6 +29,8 @@ export default function Sidebar({
   onResultClick,
   featureCounts,
   onShowStats,
+  userName,
+  onLogout,
 }) {
   const totalFeatures = useMemo(
     () => LAYER_ORDER.reduce((sum, id) => sum + (featureCounts[id] || 0), 0),
@@ -85,6 +89,51 @@ export default function Sidebar({
             <ChevronLeft size={18} />
           </button>
         </div>
+
+        {/* User info bar */}
+        {userName && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginTop: 12,
+              padding: '8px 12px',
+              background: 'rgba(255,255,255,0.04)',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-default)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <User size={14} style={{ color: 'var(--gold-primary)' }} />
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                {userName}
+              </span>
+            </div>
+            <button
+              onClick={onLogout}
+              title="Cerrar sesión"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                display: 'flex',
+                padding: 4,
+                borderRadius: 'var(--radius-sm)',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#ef4444';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--text-muted)';
+              }}
+            >
+              <LogOut size={14} />
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="sidebar-content">
@@ -285,6 +334,27 @@ export default function Sidebar({
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Branding logos footer */}
+      <div className="sidebar-branding">
+        <img
+          src="/logo-tecknologia.png"
+          alt="TECKNOLOGIA"
+          style={{ height: 30, opacity: 0.75 }}
+        />
+        <div className="sidebar-branding-divider" />
+        <img
+          src="/logo-geologgia.png"
+          alt="Geologgia Ltda."
+          style={{
+            height: 26,
+            opacity: 0.75,
+            background: 'rgba(255,255,255,0.9)',
+            borderRadius: 4,
+            padding: '2px 6px',
+          }}
+        />
       </div>
     </aside>
   );
