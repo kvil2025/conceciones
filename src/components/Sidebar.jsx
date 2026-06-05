@@ -8,7 +8,6 @@ import {
   Moon,
   Satellite,
   Mountain,
-  Pickaxe,
   X,
   LogOut,
   User,
@@ -52,11 +51,29 @@ export default function Sidebar({
     <aside className={`sidebar ${isOpen ? '' : 'collapsed'}`}>
       {/* Header */}
       <div className="sidebar-header">
+        {/* Company logos above title */}
+        <div className="sidebar-header-logos">
+          <img
+            src="/logo-tecknologia.png"
+            alt="TECKNOLOGIA"
+            style={{ height: 28, opacity: 0.85, filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.4))' }}
+          />
+          <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.12)' }} />
+          <img
+            src="/logo-geologgia.png"
+            alt="Geologgia Ltda."
+            style={{
+              height: 24,
+              opacity: 0.85,
+              background: 'rgba(255,255,255,0.9)',
+              borderRadius: 3,
+              padding: '2px 6px',
+            }}
+          />
+        </div>
+
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div className="sidebar-brand">
-            <div className="sidebar-logo">
-              <Pickaxe />
-            </div>
             <div>
               <div className="sidebar-title">Catastro Minero</div>
               <div className="sidebar-subtitle">Visor de Concesiones de Chile</div>
@@ -336,26 +353,7 @@ export default function Sidebar({
         </div>
       </div>
 
-      {/* Branding logos footer */}
-      <div className="sidebar-branding">
-        <img
-          src="/logo-tecknologia.png"
-          alt="TECKNOLOGIA"
-          style={{ height: 30, opacity: 0.75 }}
-        />
-        <div className="sidebar-branding-divider" />
-        <img
-          src="/logo-geologgia.png"
-          alt="Geologgia Ltda."
-          style={{
-            height: 26,
-            opacity: 0.75,
-            background: 'rgba(255,255,255,0.9)',
-            borderRadius: 4,
-            padding: '2px 6px',
-          }}
-        />
-      </div>
+
     </aside>
   );
 }
