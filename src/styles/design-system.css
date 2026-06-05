@@ -1150,7 +1150,6 @@ body {
   color: var(--text-secondary);
   font-size: 0.68rem;
 }
-
 /* ============================================================
    LOGIN GATE
    ============================================================ */
@@ -1170,100 +1169,98 @@ body {
   position: absolute;
   inset: 0;
   background:
+    radial-gradient(ellipse at 30% 20%, rgba(201, 168, 76, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(14, 165, 233, 0.04) 0%, transparent 50%),
     linear-gradient(
-      175deg,
-      rgba(10, 10, 15, 0.88) 0%,
-      rgba(10, 10, 15, 0.72) 40%,
-      rgba(10, 10, 15, 0.92) 100%
+      180deg,
+      rgba(10, 10, 15, 0.92) 0%,
+      rgba(10, 10, 15, 0.78) 50%,
+      rgba(10, 10, 15, 0.95) 100%
     ),
     url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/5/18/10') center/cover;
   background-size: cover;
   background-position: center;
-  filter: saturate(0.6);
+  filter: saturate(0.4) brightness(0.9);
 }
 
 .login-content {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 480px;
+  max-width: 460px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: scaleIn 0.5s ease;
+  animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Logos area */
-.login-logos {
+/* ── Hero Logos ── */
+.login-hero-logos {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  margin-bottom: 32px;
+  gap: 28px;
+  margin-bottom: 14px;
 }
 
-.login-logo-item {
+.hero-logo {
+  object-fit: contain;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+
+.hero-logo:hover {
+  transform: scale(1.04);
+}
+
+.hero-logo-tecknologia {
+  height: 62px;
+  width: auto;
+}
+
+.hero-logo-geologgia {
+  height: 52px;
+  width: auto;
+  background: rgba(255,255,255,0.94);
+  border-radius: 8px;
+  padding: 5px 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+
+.hero-logo-separator {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
 }
 
-.login-logo-tecknologia {
-  height: 56px;
-  width: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+.hero-logo-line {
+  width: 18px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.4), transparent);
 }
 
-.login-logo-geologgia {
-  height: 48px;
-  width: auto;
-  object-fit: contain;
-  background: rgba(255,255,255,0.92);
-  border-radius: var(--radius-sm);
-  padding: 4px 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+.hero-logo-x {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--gold-primary);
+  opacity: 0.6;
+  line-height: 1;
 }
 
-.login-logo-divider {
-  width: 1px;
-  height: 40px;
-  background: rgba(255,255,255,0.15);
+.login-presents {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--gold-primary);
+  opacity: 0.55;
+  margin-bottom: 24px;
 }
 
-/* Corner logos */
-.corner-logo {
-  position: fixed;
-  z-index: 501;
-  height: 38px;
-  width: auto;
-  object-fit: contain;
-  opacity: 0.45;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.corner-logo:hover {
-  opacity: 0.75;
-}
-
-.corner-tl { top: 24px; left: 24px; }
-.corner-tr { top: 24px; right: 24px; }
-.corner-bl { bottom: 24px; left: 24px; }
-.corner-br { bottom: 24px; right: 24px; }
-
-.corner-geologgia {
-  background: rgba(255,255,255,0.88);
-  border-radius: 5px;
-  padding: 3px 8px;
-  height: 32px;
-}
-
-/* Title */
+/* ── Title ── */
 .login-title {
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
   font-weight: 800;
   color: var(--text-primary);
   text-align: center;
@@ -1276,21 +1273,22 @@ body {
 }
 
 .login-subtitle {
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   color: var(--text-secondary);
   text-align: center;
   max-width: 360px;
-  line-height: 1.5;
-  margin-bottom: 28px;
+  line-height: 1.55;
+  margin-bottom: 24px;
 }
 
-/* Stats row */
+/* ── Stats ── */
 .login-stats {
   display: flex;
-  gap: 32px;
-  margin-bottom: 36px;
-  padding: 16px 28px;
-  background: rgba(255,255,255,0.04);
+  align-items: center;
+  gap: 0;
+  margin-bottom: 28px;
+  padding: 14px 32px;
+  background: rgba(255,255,255,0.03);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(10px);
@@ -1301,57 +1299,76 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
+  padding: 0 24px;
+}
+
+.login-stat-sep {
+  width: 1px;
+  height: 28px;
+  background: var(--border-default);
+  flex-shrink: 0;
 }
 
 .login-stat-number {
   font-family: var(--font-heading);
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 800;
   color: var(--text-primary);
 }
 
 .login-stat-label {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--text-muted);
 }
 
-/* Form */
+/* ── Form ── */
 .login-form {
   width: 100%;
-  background: rgba(13, 17, 23, 0.8);
+  background: rgba(13, 17, 23, 0.75);
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-xl);
-  padding: 32px 28px;
+  padding: 28px 26px;
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   box-shadow: var(--shadow-lg), var(--shadow-gold);
 }
 
+.login-form-title {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 .login-form-group {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .login-label {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 6px;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
 }
 
 .login-input {
   width: 100%;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.06);
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   outline: none;
   transition: all var(--transition-fast);
 }
@@ -1362,27 +1379,27 @@ body {
 
 .login-input:focus {
   border-color: var(--gold-primary);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.07);
   box-shadow: 0 0 0 3px var(--gold-subtle);
 }
 
 .login-error {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: #ef4444;
   margin-bottom: 12px;
   padding: 8px 12px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
   border-radius: var(--radius-sm);
 }
 
 .login-submit {
   width: 100%;
-  padding: 14px 24px;
+  padding: 13px 24px;
   background: var(--gradient-gold);
   color: #000;
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
   border: none;
   border-radius: var(--radius-md);
@@ -1394,7 +1411,7 @@ body {
   gap: 10px;
   box-shadow: var(--shadow-gold);
   letter-spacing: 0.02em;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .login-submit:hover:not(:disabled) {
@@ -1421,24 +1438,48 @@ body {
   animation: spin 0.7s linear infinite;
 }
 
-/* Footer */
+/* ── Footer ── */
 .login-footer {
-  margin-top: 24px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.68rem;
+  margin-top: 20px;
+  font-size: 0.65rem;
   color: var(--text-muted);
-  flex-wrap: wrap;
-  justify-content: center;
+  text-align: center;
 }
 
 .login-footer strong {
   color: var(--text-secondary);
 }
 
-.login-footer-dot {
-  opacity: 0.4;
+/* ── Responsive ── */
+@media (max-width: 520px) {
+  .login-hero-logos {
+    gap: 16px;
+  }
+
+  .hero-logo-tecknologia {
+    height: 44px;
+  }
+
+  .hero-logo-geologgia {
+    height: 38px;
+    padding: 4px 10px;
+  }
+
+  .hero-logo-line {
+    width: 10px;
+  }
+
+  .login-form {
+    padding: 22px 18px;
+  }
+
+  .login-stat {
+    padding: 0 14px;
+  }
+
+  .login-stats {
+    padding: 12px 16px;
+  }
 }
 
 /* ============================================================

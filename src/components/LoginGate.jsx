@@ -1,20 +1,9 @@
 import { useState } from 'react';
 
-/*
- * LoginGate — Pantalla de acceso obligatorio.
- * Captura nombre, email y empresa del usuario.
- * Envía los datos por email usando EmailJS (gratuito, sin backend).
- *
- * CONFIGURACIÓN EmailJS:
- * 1. Crear cuenta en https://www.emailjs.com (gratis, 200 emails/mes)
- * 2. Agregar servicio SMTP (Gmail, Outlook, etc.)
- * 3. Crear template con variables: {{from_name}}, {{from_email}}, {{company}}, {{message}}
- * 4. Copiar service_id, template_id y public_key al objeto EMAILJS_CONFIG
- */
 const EMAILJS_CONFIG = {
-  serviceId: 'YOUR_SERVICE_ID',     // ← Reemplazar con tu service ID de EmailJS
-  templateId: 'YOUR_TEMPLATE_ID',   // ← Reemplazar con tu template ID
-  publicKey: 'YOUR_PUBLIC_KEY',     // ← Reemplazar con tu public key
+  serviceId: 'YOUR_SERVICE_ID',
+  templateId: 'YOUR_TEMPLATE_ID',
+  publicKey: 'YOUR_PUBLIC_KEY',
   toEmail: 'contacto@tecknologia.cl',
 };
 
@@ -42,31 +31,21 @@ export default function LoginGate({ onAccessGranted }) {
     setError('');
 
     try {
-      // Send email via EmailJS
       if (EMAILJS_CONFIG.serviceId !== 'YOUR_SERVICE_ID') {
         await sendEmail({ name, email, company });
       } else {
-        // Fallback: log to console when EmailJS is not configured
         console.log('📧 Nuevo acceso al Catastro Minero:', { name, email, company, timestamp: new Date().toISOString() });
       }
 
-      // Store access in localStorage so user doesn't need to log in again
       localStorage.setItem('catastro_access', JSON.stringify({
-        name,
-        email,
-        company,
-        timestamp: new Date().toISOString(),
+        name, email, company, timestamp: new Date().toISOString(),
       }));
 
       onAccessGranted({ name, email, company });
     } catch (err) {
       console.error('Error sending email:', err);
-      // Grant access anyway — don't block due to email failure
       localStorage.setItem('catastro_access', JSON.stringify({
-        name,
-        email,
-        company,
-        timestamp: new Date().toISOString(),
+        name, email, company, timestamp: new Date().toISOString(),
       }));
       onAccessGranted({ name, email, company });
     } finally {
@@ -91,71 +70,66 @@ export default function LoginGate({ onAccessGranted }) {
         },
       }),
     });
-
-    if (!response.ok) {
-      throw new Error('EmailJS error');
-    }
+    if (!response.ok) throw new Error('EmailJS error');
   }
 
   return (
     <div className="login-gate">
-      {/* Background image overlay */}
       <div className="login-bg" />
 
-      {/* Corner logos */}
-      <img src="/logo-tecknologia.png" alt="TECKNOLOGIA" className="corner-logo corner-tl" />
-      <img src="/logo-geologgia.png" alt="Geologgia Ltda." className="corner-logo corner-tr corner-geologgia" />
-      <img src="/logo-geologgia.png" alt="Geologgia Ltda." className="corner-logo corner-bl corner-geologgia" />
-      <img src="/logo-tecknologia.png" alt="TECKNOLOGIA" className="corner-logo corner-br" />
-
-      {/* Content */}
       <div className="login-content">
-        {/* Logos */}
-        <div className="login-logos">
-          <div className="login-logo-item">
-            <img
-              src="/logo-tecknologia.png"
-              alt="TECKNOLOGIA"
-              className="login-logo-tecknologia"
-            />
+        {/* ── Hero Logos ── */}
+        <div className="login-hero-logos">
+          <img
+            src="/logo-tecknologia.png"
+            alt="TECKNOLOGIA"
+            className="hero-logo hero-logo-tecknologia"
+          />
+          <div className="hero-logo-separator">
+            <div className="hero-logo-line" />
+            <span className="hero-logo-x">×</span>
+            <div className="hero-logo-line" />
           </div>
-          <div className="login-logo-divider" />
-          <div className="login-logo-item">
-            <img
-              src="/logo-geologgia.png"
-              alt="Geologgia Ltda."
-              className="login-logo-geologgia"
-            />
-          </div>
+          <img
+            src="/logo-geologgia.png"
+            alt="Geologgia Ltda."
+            className="hero-logo hero-logo-geologgia"
+          />
         </div>
 
-        {/* Title */}
+        <p className="login-presents">presentan</p>
+
+        {/* ── Title ── */}
         <h1 className="login-title">
           Catastro Minero
           <span className="login-title-gold"> de Chile</span>
         </h1>
         <p className="login-subtitle">
-          Visor profesional de concesiones, manifestaciones, mensuras y pedimentos
+          Visor profesional de concesiones, manifestaciones, mensuras y pedimentos mineros
         </p>
 
-        {/* Stats */}
+        {/* ── Stats ── */}
         <div className="login-stats">
           <div className="login-stat">
             <span className="login-stat-number">195.072</span>
             <span className="login-stat-label">Registros</span>
           </div>
+          <div className="login-stat-sep" />
           <div className="login-stat">
             <span className="login-stat-number">4</span>
-            <span className="login-stat-label">Capas de datos</span>
+            <span className="login-stat-label">Capas</span>
           </div>
+          <div className="login-stat-sep" />
           <div className="login-stat">
             <span className="login-stat-number">2026</span>
             <span className="login-stat-label">Actualizado</span>
           </div>
         </div>
 
-        {/* Form */}
+        {/* ── Form ── */}
         <form className="login-form" onSubmit={handleSubmit}>
+          <div className="login-form-title">Accede al visor</div>
+
           <div className="login-form-group">
             <label className="login-label">Nombre completo *</label>
             <input
@@ -194,11 +168,7 @@ export default function LoginGate({ onAccessGranted }) {
 
           {error && <div className="login-error">{error}</div>}
 
-          <button
-            className="login-submit"
-            type="submit"
-            disabled={loading}
-          >
+          <button className="login-submit" type="submit" disabled={loading}>
             {loading ? (
               <>
                 <span className="login-spinner" />
@@ -210,10 +180,8 @@ export default function LoginGate({ onAccessGranted }) {
           </button>
         </form>
 
-        {/* Footer credits */}
+        {/* ── Footer ── */}
         <div className="login-footer">
-          <span>Desarrollado por <strong>TECKNOLOGIA</strong></span>
-          <span className="login-footer-dot">·</span>
           <span>Datos: <strong>SERNAGEOMIN</strong> · Boletín Abril 2026</span>
         </div>
       </div>
