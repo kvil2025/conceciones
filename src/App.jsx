@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import MapViewer from './components/MapViewer';
 import StatsModal from './components/StatsModal';
 import LoadingScreen from './components/LoadingScreen';
+import Toast from './components/Toast';
 
 export default function App() {
   // Layer visibility state
@@ -18,7 +19,7 @@ export default function App() {
   // Loading state per layer
   const [layerLoading, setLayerLoading] = useState({});
 
-  // Layer data cache
+  // Layer data cache (for search)
   const layerDataRef = useRef({});
 
   // Current basemap
@@ -44,6 +45,9 @@ export default function App() {
   // Fly to coordinates
   const [flyTo, setFlyTo] = useState(null);
 
+  // Toast messages
+  const [toasts, setToasts] = useState([]);
+
   // Feature counts (actual loaded)
   const [featureCounts, setFeatureCounts] = useState(() => {
     const counts = {};
@@ -52,6 +56,15 @@ export default function App() {
     });
     return counts;
   });
+
+  // Show toast notification
+  const showToast = useCallback((message, type = 'info', duration = 3000) => {
+    const id = Date.now() + Math.random();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, duration);
+  }, []);
 
   // Load stats.json on mount
   useEffect(() => {
@@ -68,20 +81,40 @@ export default function App() {
   }, []);
 
   // Toggle layer visibility
-  const handleToggleLayer = useCallback((layerId) => {
-    setLayerVisibility((prev) => ({
-      ...prev,
-      [layerId]: !prev[layerId],
-    }));
-  }, []);
+  const handleToggleLayer = useCallback(
+    (layerId) => {
+      setLayerVisibility((prev) => {
+        const newVisibility = !prev[layerId];
+        if (newVisibility) {
+          showToast(`Cargando ${LAYERS[layerId].name}...`, 'loading', 8000);
+        }
+        return { ...prev, [layerId]: newVisibility };
+      });
+    },
+    [showToast]
+  );
 
   // Update loading state for a layer
-  const handleLayerLoading = useCallback((layerId, isLoading) => {
-    setLayerLoading((prev) => ({
-      ...prev,
-      [layerId]: isLoading,
-    }));
-  }, []);
+  const handleLayerLoading = useCallback(
+    (layerId, isLoading) => {
+      setLayerLoading((prev) => ({
+        ...prev,
+        [layerId]: isLoading,
+      }));
+      if (!isLoading && layerVisibility[layerId]) {
+        // Remove loading toast and show success
+        setToasts((prev) =>
+          prev.filter((t) => !t.message.includes(LAYERS[layerId].name))
+        );
+        showToast(
+          `${LAYERS[layerId].name}: ${LAYERS[layerId].count.toLocaleString('es-CL')} registros cargados`,
+          'success',
+          3000
+        );
+      }
+    },
+    [layerVisibility, showToast]
+  );
 
   // Search handler with debounce
   const searchTimeoutRef = useRef(null);
@@ -197,6 +230,8 @@ export default function App() {
       {showStats && statsData && (
         <StatsModal data={statsData} onClose={() => setShowStats(false)} />
       )}
+      {/* Toast notifications */}
+      <Toast toasts={toasts} />
     </>
   );
 }
