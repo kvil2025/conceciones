@@ -10,8 +10,20 @@ import Toast from './components/Toast';
 export default function App() {
   // Auth / Access gate
   const [hasAccess, setHasAccess] = useState(() => {
-    const stored = localStorage.getItem('catastro_access');
-    return stored ? true : false;
+    try {
+      const stored = localStorage.getItem('catastro_access');
+      if (!stored) return false;
+      const data = JSON.parse(stored);
+      // Invalidate sessions from before v2 (MapLibre CSS fix)
+      if (!data.version || data.version < 2) {
+        localStorage.removeItem('catastro_access');
+        return false;
+      }
+      return true;
+    } catch {
+      localStorage.removeItem('catastro_access');
+      return false;
+    }
   });
   const [userName, setUserName] = useState(() => {
     try {

@@ -38,14 +38,14 @@ export default function LoginGate({ onAccessGranted }) {
       }
 
       localStorage.setItem('catastro_access', JSON.stringify({
-        name, email, company, timestamp: new Date().toISOString(),
+        name, email, company, version: 2, timestamp: new Date().toISOString(),
       }));
 
       onAccessGranted({ name, email, company });
     } catch (err) {
       console.error('Error sending email:', err);
       localStorage.setItem('catastro_access', JSON.stringify({
-        name, email, company, timestamp: new Date().toISOString(),
+        name, email, company, version: 2, timestamp: new Date().toISOString(),
       }));
       onAccessGranted({ name, email, company });
     } finally {
