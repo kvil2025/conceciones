@@ -12,7 +12,7 @@ export const LAYERS = {
     file: '/data/concesion.geojson',
     centroidsFile: '/data/concesion-centroids.json',
     count: 40158,
-    defaultVisible: true,
+    defaultVisible: false,
   },
   manifestacion: {
     id: 'manifestacion',
