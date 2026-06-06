@@ -398,7 +398,7 @@ export default function MapViewer({
 
       {/* Brand watermark */}
       <div className="map-watermark">
-        <img src="/logo-tecknologia.png" alt="TECKNOLOGIA" />
+        <img src="/logo-tecknologia-white.png" alt="TECKNOLOGIA" />
         <div className="map-watermark-divider" />
         <img
           src="/logo-geologgia.png"

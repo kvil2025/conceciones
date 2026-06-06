@@ -81,7 +81,7 @@ export default function LoginGate({ onAccessGranted }) {
         {/* ── Hero Logos ── */}
         <div className="login-hero-logos">
           <img
-            src="/logo-tecknologia.png"
+            src="/logo-tecknologia-white.png"
             alt="TECKNOLOGIA"
             className="hero-logo hero-logo-tecknologia"
           />

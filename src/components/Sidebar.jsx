@@ -54,7 +54,7 @@ export default function Sidebar({
         {/* Company logos above title */}
         <div className="sidebar-header-logos">
           <img
-            src="/logo-tecknologia.png"
+            src="/logo-tecknologia-white.png"
             alt="TECKNOLOGIA"
             style={{ height: 28, opacity: 0.85, filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.4))' }}
           />

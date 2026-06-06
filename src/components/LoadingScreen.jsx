@@ -5,7 +5,7 @@ export default function LoadingScreen() {
       <div className="login-logos" style={{ marginBottom: 24 }}>
         <div className="login-logo-item">
           <img
-            src="/logo-tecknologia.png"
+            src="/logo-tecknologia-white.png"
             alt="TECKNOLOGIA"
             style={{ height: 48, filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))' }}
           />
