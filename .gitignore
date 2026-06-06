@@ -28,6 +28,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Large data files (generate with: python3 scripts/prepare_data.py)
-public/data/*.geojson
+# Generated files (can be regenerated)
 public/data/*-centroids.json
+scripts/__pycache__/

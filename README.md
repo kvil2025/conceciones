@@ -1,95 +1,149 @@
-# 🏔️ Catastro Minero de Chile — Visor de Concesiones
+# 🗺️ Catastro Minero de Chile — Visor Interactivo
 
-Visor profesional e interactivo del catastro minero de Chile. Permite visualizar y explorar concesiones de exploración, manifestaciones, mensuras y pedimentos sobre un mapa interactivo.
+Visor profesional de concesiones mineras de Chile con datos del **SERNAGEOMIN** (Boletín Abril 2026).
 
-## ✨ Características
+Desarrollado por **[TECKNOLOGIA](https://tecknologia.cl)** × **Geologgia Ltda.**
 
-- **4 capas de datos** con ~195.000 registros:
-  - 🟡 Concesiones de Exploración (40.158)
-  - 🟢 Manifestaciones (64.131)
-  - 🔵 Mensuras (85.977)
-  - 🔴 Pedimentos (4.806)
-- **Mapa interactivo** con MapLibre GL JS
-- **3 mapas base**: CARTO Dark, Esri Satellite, OpenTopoMap
-- **Búsqueda** por nombre o titular con resultados en tiempo real
-- **Popups informativos** con datos registrales completos
-- **Estadísticas** con gráficos interactivos (distribución por tipo, top titulares, distribución por año)
-- **Design premium** dark mode con glassmorphism y acentos dorados
-- **Responsive** — funciona en desktop y mobile
+![Capas](https://img.shields.io/badge/Registros-195.072-gold)
+![Capas](https://img.shields.io/badge/Capas-4-blue)
+![Datos](https://img.shields.io/badge/Fuente-SERNAGEOMIN-green)
 
-## 📊 Fuente de Datos
+---
 
-Catastro minero de SERNAGEOMIN — Boletín Abril 2026.
+## 📊 Datos incluidos
 
-## 🚀 Inicio Rápido
+| Capa | Registros | Archivo |
+|---|---|---|
+| 🟡 Concesiones | 40.158 | `concesion.geojson` |
+| 🟢 Manifestaciones | 64.131 | `manifestacion.geojson` |
+| 🔵 Mensuras | 85.977 | `mensura.geojson` |
+| 🔴 Pedimentos | 4.806 | `pedimento.geojson` |
 
-### Pre-requisitos
-- Node.js 18+
-- Python 3.9+ (para preparar los datos)
+---
 
-### 1. Clonar el repositorio
+## 🚀 Instalación rápida (local)
+
+### Requisitos
+- **Node.js** 18+ → [descargar](https://nodejs.org/)
+- **Git** → [descargar](https://git-scm.com/)
+
+### 3 pasos
+
 ```bash
+# 1. Clonar el repositorio
 git clone https://github.com/kvil2025/conceciones.git
 cd conceciones
-```
 
-### 2. Instalar dependencias
-```bash
+# 2. Instalar dependencias
 npm install
-```
 
-### 3. Preparar los datos
-Los archivos GeoJSON del catastro minero deben estar en la carpeta fuente. Ejecutar el script de preparación:
-```bash
-python3 scripts/prepare_data.py
-```
-> **Nota:** El script espera los archivos GeoJSON originales en `~/catastro_conseciones/`. Modifica el `SOURCE_DIR` en el script si los tienes en otra ubicación.
-
-### 4. Ejecutar en desarrollo
-```bash
+# 3. Iniciar la app
 npm run dev
 ```
 
-### 5. Build de producción
-```bash
-npm run build
+Abre **http://localhost:5173** en tu navegador. ¡Listo! 🎉
+
+> **Nota:** Los datos GeoJSON (~119 MB) están incluidos en el repositorio. La primera clonación puede tomar unos minutos dependiendo de tu conexión.
+
+---
+
+## 🖥️ Funcionalidades
+
+- **Mapa interactivo** con MapLibre GL JS
+- **4 capas de datos** activables por separado
+- **3 mapas base**: Oscuro, Satélite, Topográfico
+- **Búsqueda** por nombre de concesión o titular
+- **Estadísticas** con gráficos por tipo y año
+- **Popup detallado** al hacer click en cualquier polígono
+- **Coordenadas en tiempo real** del cursor
+- **Responsive** — funciona en escritorio y móvil
+
+---
+
+## 🛠️ Stack tecnológico
+
+| Tecnología | Uso |
+|---|---|
+| [React 19](https://react.dev) | UI framework |
+| [Vite](https://vite.dev) | Build tool |
+| [MapLibre GL JS](https://maplibre.org) | Motor de mapas |
+| [Lucide React](https://lucide.dev) | Iconografía |
+| [Recharts](https://recharts.org) | Gráficos estadísticos |
+
+---
+
+## 📁 Estructura del proyecto
+
 ```
-
-## 🛠️ Stack Tecnológico
-
-| Componente | Tecnología |
-|-----------|-----------|
-| Framework | React 19 + Vite 6 |
-| Mapa | MapLibre GL JS 4.7 |
-| Gráficos | Recharts 2.15 |
-| Iconos | Lucide React |
-| Estilos | CSS Custom Properties |
-| Fuentes | Inter + Outfit (Google Fonts) |
-
-## 📁 Estructura del Proyecto
-
-```
+conceciones/
 ├── public/
-│   └── data/          # GeoJSON + stats (generados por prepare_data.py)
-├── scripts/
-│   └── prepare_data.py # Genera centroides y estadísticas
+│   ├── data/              ← GeoJSON de SERNAGEOMIN
+│   │   ├── concesion.geojson
+│   │   ├── manifestacion.geojson
+│   │   ├── mensura.geojson
+│   │   ├── pedimento.geojson
+│   │   └── stats.json
+│   ├── logo-tecknologia.png
+│   └── logo-geologgia.png
 ├── src/
 │   ├── components/
-│   │   ├── MapViewer.jsx      # Mapa MapLibre GL
-│   │   ├── Sidebar.jsx        # Panel lateral
-│   │   ├── StatsModal.jsx     # Modal de estadísticas
-│   │   └── LoadingScreen.jsx  # Pantalla de carga
+│   │   ├── MapViewer.jsx   ← Mapa principal
+│   │   ├── Sidebar.jsx     ← Panel lateral
+│   │   ├── LoginGate.jsx   ← Pantalla de acceso
+│   │   ├── StatsModal.jsx  ← Modal de estadísticas
+│   │   └── LoadingScreen.jsx
 │   ├── config/
-│   │   └── layers.js          # Configuración de capas
-│   ├── styles/
-│   │   └── design-system.css  # Sistema de diseño
-│   ├── App.jsx
-│   └── main.jsx
-├── index.html
+│   │   └── layers.js       ← Configuración de capas
+│   └── styles/
+│       └── design-system.css
+├── scripts/
+│   └── optimize_geojson.py ← Optimizador de datos
 ├── package.json
 └── vite.config.js
 ```
 
+---
+
+## 🔧 Comandos útiles
+
+```bash
+# Desarrollo (con hot reload)
+npm run dev
+
+# Build de producción
+npm run build
+
+# Preview del build
+npm run preview
+
+# Optimizar GeoJSON (requiere Python 3)
+python3 scripts/optimize_geojson.py
+```
+
+---
+
+## 🌐 Versión online
+
+La app también está disponible en: **[catastro-minero.vercel.app](https://catastro-minero.vercel.app)**
+
+> ⚠️ La versión online puede ser lenta por la descarga de datos. Para mejor rendimiento, usa la versión local.
+
+---
+
+## 📋 Datos
+
+Los datos provienen del **Boletín Oficial de Minería** de [SERNAGEOMIN](https://www.sernageomin.cl/) (Abril 2026). Incluyen concesiones de exploración, manifestaciones mineras, mensuras constituidas y pedimentos registrados a lo largo de todo Chile.
+
+---
+
 ## 📄 Licencia
 
-Datos de catastro minero: SERNAGEOMIN (Chile). Uso educativo y de referencia.
+Datos: Dominio público (SERNAGEOMIN).
+Código: MIT License.
+
+---
+
+<p align="center">
+  <strong>TECKNOLOGIA</strong> × <strong>Geologgia Ltda.</strong><br>
+  Inteligencia geológica aplicada 🇨🇱
+</p>
